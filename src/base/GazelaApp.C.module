@@ -1,0 +1,47 @@
+#include "GazelaApp.h"
+#include "Moose.h"
+#include "AppFactory.h"
+#include "MooseSyntax.h"
+
+template<>
+InputParameters validParams<GazelaApp>()
+{
+  InputParameters params = validParams<MooseApp>();
+  return params;
+}
+
+GazelaApp::GazelaApp(InputParameters parameters) :
+    MooseApp(parameters)
+{
+  Moose::registerObjects(_factory);
+  GazelaApp::registerObjects(_factory);
+
+  Moose::associateSyntax(_syntax, _action_factory);
+  GazelaApp::associateSyntax(_syntax, _action_factory);
+}
+
+GazelaApp::~GazelaApp()
+{
+}
+
+// External entry point for dynamic application loading
+extern "C" void GazelaApp__registerApps() { GazelaApp::registerApps(); }
+void
+GazelaApp::registerApps()
+{
+  registerApp(GazelaApp);
+}
+
+// External entry point for dynamic object registration
+extern "C" void GazelaApp__registerObjects(Factory & factory) { GazelaApp::registerObjects(factory); }
+void
+GazelaApp::registerObjects(Factory & /*factory*/)
+{
+}
+
+// External entry point for dynamic syntax association
+extern "C" void GazelaApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory) { GazelaApp::associateSyntax(syntax, action_factory); }
+void
+GazelaApp::associateSyntax(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
+{
+}
